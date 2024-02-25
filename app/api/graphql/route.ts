@@ -1,11 +1,11 @@
-import { startServerAndCreateNextHandler } from "@as-integrations/next";
-import mongoose from "mongoose";
-import { ApolloServer } from "@apollo/server";
-import { NextRequest } from "next/server";
-import typeDefs from "./schema";
-import resolvers from "./resolvers";
-import Users from "./datasources";
-import UserModel from "./models";
+import { startServerAndCreateNextHandler } from '@as-integrations/next';
+import mongoose from 'mongoose';
+import { ApolloServer } from '@apollo/server';
+import { NextRequest } from 'next/server';
+import typeDefs from './schema';
+import resolvers from './resolvers';
+import { Users, Games } from './datasources';
+import { UserModel, GameModel } from './models';
 
 const uri = process.env.NEXT_PUBLIC_MONGODB_URI;
 
@@ -13,7 +13,7 @@ const connectDB = async () => {
   try {
     if (uri) {
       await mongoose.connect(uri);
-      console.log("🎉 connected to database successfully");
+      console.log('🎉 connected to database successfully');
     }
   } catch (error) {
     console.error(error);
@@ -32,6 +32,7 @@ const handler = startServerAndCreateNextHandler<NextRequest>(server, {
     res,
     dataSources: {
       users: new Users({ modelOrCollection: UserModel }),
+      games: new Games({ modelOrCollection: GameModel }),
     },
   }),
 });
